@@ -67,6 +67,8 @@ export default function App() {
 
 console.log("Entregas:", resultado.entregas);
 console.log("Coletas:", resultado.coletas);
+console.log("ROTAS ENCONTRADAS:");
+resultado.entregas.forEach((r) => console.log(r.rota));
 
 setRotasEntrega(resultado.entregas);
 setRotasColeta(resultado.coletas);

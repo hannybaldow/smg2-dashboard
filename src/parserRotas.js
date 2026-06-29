@@ -6,8 +6,11 @@ export function extrairRotas(texto) {
   const coletas = [];
 
   blocos.forEach((bloco) => {
+    console.log("==================================");
+console.log(bloco.substring(0,80));
 
-    const rotaEntrega = bloco.match(/([A-Z]{2}\d+_AM1)/);
+    const rotaEntrega = bloco.match(/([A-Z]{1,3}\d+_AM1)/i);
+    console.log("ROTA:", rotaEntrega ? rotaEntrega[1] : "NÃO ENCONTROU");
     const rotaColeta = bloco.match(/Rota\s*#(\d+)/i);
 
     if (!rotaEntrega && !rotaColeta) return;
@@ -24,7 +27,11 @@ export function extrairRotas(texto) {
 
     const total = bloco.match(/SPR\s+(\d+)\s+unidades/i);
 
-    if (!spr) return;
+    if (!spr) {
+  console.log("SPR NÃO ENCONTRADO");
+  console.log(bloco);
+  return;
+}
 
     const linhas = bloco
       .split("\n")
@@ -55,21 +62,23 @@ console.log(
 );
 
     const pendentes = Number(spr[1]);
-    const falhas = Number(spr[2]);
-    const entregues = Number(spr[3]);
+const falhas = Number(spr[2]);
+const entregues = Number(spr[3]);
 
-    const dados = {
-      tipo: rotaEntrega ? "Entrega" : "Coleta",
-      rota: rotaEntrega ? rotaEntrega[1] : "COLETA",
-      numero: numero ? numero[1] : "",
-      placa: placa,
-      motorista: motorista ? motorista[1].trim() : "",
-      totalPacotes: total ? Number(total[1]) : entregues + falhas,
-      pendentes,
-      falhas,
-      entregues,
-      orh: executado ? executado[1] : ""
-    };
+console.log("CAPTUROU:", rotaEntrega ? rotaEntrega[1] : "COLETA", "| SPR:", spr ? "SIM" : "NÃO");
+
+const dados = {
+  tipo: rotaEntrega ? "Entrega" : "Coleta",
+  rota: rotaEntrega ? rotaEntrega[1] : "COLETA",
+  numero: numero ? numero[1] : "",
+  placa: placa,
+  motorista: motorista ? motorista[1].trim() : "",
+  totalPacotes: total ? Number(total[1]) : entregues + falhas,
+  pendentes,
+  falhas,
+  entregues,
+  orh: executado ? executado[1] : ""
+};
 
     console.log(dados);
 
