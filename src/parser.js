@@ -36,6 +36,7 @@ export function gerarDados(relatorio) {
   falhas: pegarValor("Com falhas"),
   entregues: pegarValor("Bem-sucedidos")
 });
+console.log(linhas);
 
   return {
 
