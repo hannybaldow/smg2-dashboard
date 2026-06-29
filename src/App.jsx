@@ -141,7 +141,7 @@ function copiarFechamento() {
 
     <div className="box">
 
-      <h2>📋 Cole o relatório da Amazon</h2>
+      <h2>📋 Cole o relatório operacional do Logistics</h2>
 
       <textarea
         value={relatorio}
