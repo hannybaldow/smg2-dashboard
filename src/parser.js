@@ -1,38 +1,58 @@
 export function gerarDados(relatorio) {
 
-  function numero(regex) {
-    const match = relatorio.match(regex);
-    return match ? Number(match[1].replace(/\./g, "").replace(",", ".")) : 0;
+  const linhas = relatorio
+    .split("\n")
+    .map(l => l.trim())
+    .filter(Boolean);
+
+  function pegarValor(titulo) {
+
+    const indice = linhas.findIndex(l => l === titulo);
+
+    if (indice === -1) return 0;
+
+    const valor = linhas[indice + 1];
+
+    return Number(valor.replace(/\./g, "").replace(",", "."));
   }
 
-  const rotas = numero(/Rotas totais\s+(\d+)/i);
+  function pegarPercentual(titulo) {
 
-  const pacotes = numero(/Pacotes\s+(\d+)/i);
+    const indice = linhas.findIndex(l => l === titulo);
 
-  const pendentes = numero(/Pendentes\s+(\d+)\s+69,2%/i) ||
-                    numero(/Pendentes\s+(\d+)/i);
+    if (indice === -1) return "0%";
 
-  const falhas = numero(/Com falhas\s+(\d+)\s+2,7%/i) ||
-                 numero(/Com falhas\s+(\d+)/i);
+    const valor = linhas[indice + 2];
 
-  const entregues = numero(/Bem-sucedidos\s+(\d+)\s+28,1%/i) ||
-                    numero(/Bem-sucedidos\s+(\d+)/i);
+    if (!valor || !valor.includes("%")) return "0%";
 
-  const dsMatch = relatorio.match(/Bem-sucedidos\s+\d+\s+([\d,]+)%/i);
+    return valor;
+  }
 
-  const ds = dsMatch ? dsMatch[1] + "%" : "0%";
-
-  const impacto = relatorio.match(/Com falhas\s+\d+\s+([\d,]+)%/i);
-
-const percentualFalhas = impacto ? impacto[1] + "%" : "0%";
+  console.log({
+  rotas: pegarValor("Rotas totais"),
+  pacotes: pegarValor("Pacotes"),
+  pendentes: pegarValor("Pendentes"),
+  falhas: pegarValor("Com falhas"),
+  entregues: pegarValor("Bem-sucedidos")
+});
 
   return {
-    ds,
-    rotas,
-    pacotes,
-    pendentes,
-    falhas,
-    entregues,
-    percentualFalhas,
+
+    rotas: pegarValor("Rotas totais"),
+
+    pacotes: pegarValor("Pacotes"),
+
+    pendentes: pegarValor("Pendentes"),
+
+    falhas: pegarValor("Com falhas"),
+
+    entregues: pegarValor("Bem-sucedidos"),
+
+    ds: pegarPercentual("Bem-sucedidos"),
+
+    percentualFalhas: pegarPercentual("Com falhas")
+
   };
+
 }
