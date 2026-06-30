@@ -117,15 +117,17 @@ ${gerarTextoRanking(ranking)}
 
 ━━━━━━━━━━━━━━━━━━
 
+${gerarTextoColetas(rotasColeta)}
+
+━━━━━━━━━━━━━━━━━━
+
 ${gerarRankingOfensores(ranking)}
 
 ━━━━━━━━━━━━━━━━━━
 
 ${gerarRankingPromotores(rotasEntrega)}
 
-${gerarTextoColetas(rotasColeta)}
 `;
-
 
 function copiarFechamento() {
   navigator.clipboard.writeText(fechamento);
@@ -351,16 +353,15 @@ ${gerarTextoRanking(ranking)}
 
 ━━━━━━━━━━━━━━━━━━
 
+${gerarTextoColetas(rotasColeta)}
+
+━━━━━━━━━━━━━━━━━━
+
 ${gerarRankingOfensores(ranking)}
 
 ━━━━━━━━━━━━━━━━━━
 
-${gerarRankingPromotores(rotasEntrega)}
-
-
-${gerarTextoColetas(rotasColeta)}`}
-
-
+${gerarRankingPromotores(rotasEntrega)}`}
       />
     </div>
 
