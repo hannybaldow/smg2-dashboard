@@ -121,9 +121,13 @@ linhas.push(`• Não visitado: ${total.naoVisitado}`);
 }
 export function gerarTextoRanking(rotas) {
 
-  if (!rotas.length) return "";
+  const entregas = rotas.filter(
+    (r) => !r.rota.startsWith("COLETA_")
+  );
 
-  return rotas.map((rota) => {
+  if (!entregas.length) return "";
+
+  return entregas.map((rota) => {
 
     const ds = rota.ds.toFixed(1).replace(".", ",");
 

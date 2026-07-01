@@ -3,7 +3,8 @@ export function gerarRanking(detalhesRotas) {
   return detalhesRotas
     .map((r) => {
 
-      const total = r.totalPacotes || (r.entregues + r.falhas);
+      // O DS deve ser calculado apenas por entregues + falhas
+      const total = r.entregues + r.falhas;
 
       const ds = total > 0
         ? (r.entregues / total) * 100
@@ -15,7 +16,17 @@ export function gerarRanking(detalhesRotas) {
       };
 
     })
-   .filter((r) => r.falhas > 0)
-    .sort((a, b) => a.ds - b.ds);
+    .filter((r) => r.falhas > 0)
+    .sort((a, b) => {
+
+      // Primeiro quem tem mais falhas
+      if (b.falhas !== a.falhas) {
+        return b.falhas - a.falhas;
+      }
+
+      // Em empate, menor DS primeiro
+      return a.ds - b.ds;
+
+    });
 
 }

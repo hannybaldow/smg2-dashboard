@@ -69,7 +69,10 @@ console.log("Entregas:", resultado.entregas);
 console.log("Coletas:", resultado.coletas);
 console.log("ROTAS ENCONTRADAS:");
 resultado.entregas.forEach((r) => console.log(r.rota));
-
+console.log("ENTREGAS:", resultado.entregas.length);
+console.log("COLETAS:", resultado.coletas.length);
+console.log(resultado.entregas);
+console.log(resultado.coletas);
 setRotasEntrega(resultado.entregas);
 setRotasColeta(resultado.coletas);
 }
@@ -117,7 +120,7 @@ ${gerarTextoRanking(ranking)}
 
 ━━━━━━━━━━━━━━━━━━
 
-${gerarTextoColetas(rotasColeta)}
+${gerarTextoColetas(rotasColeta, detalhesRotas)}
 
 ━━━━━━━━━━━━━━━━━━
 
@@ -257,8 +260,8 @@ function copiarFechamento() {
 
     </div>
 
-   <RotasFalha
-  rotas={rotasEntrega}
+ <RotasFalha
+  rotas={[...rotasEntrega, ...rotasColeta]}
   detalhesRotas={detalhesRotas}
   setDetalhesRotas={setDetalhesRotas}
 />
@@ -353,7 +356,7 @@ ${gerarTextoRanking(ranking)}
 
 ━━━━━━━━━━━━━━━━━━
 
-${gerarTextoColetas(rotasColeta)}
+${gerarTextoColetas(rotasColeta, detalhesRotas)}
 
 ━━━━━━━━━━━━━━━━━━
 

@@ -9,9 +9,11 @@ export function extrairRotas(texto) {
     console.log("==================================");
 console.log(bloco.substring(0,80));
 
-    const rotaEntrega = bloco.match(/([A-Z]{1,3}\d+_AM1)/i);
+    const rotaEntrega = bloco.match(/([A-Z]{1,3}\d+_(AM1|SD))/i);
     console.log("ROTA:", rotaEntrega ? rotaEntrega[1] : "NÃO ENCONTROU");
-    const rotaColeta = bloco.match(/Rota\s*#(\d+)/i);
+    const rotaColeta =
+  !rotaEntrega &&
+  bloco.match(/Rota\s*#(\d+)/i);
 
     if (!rotaEntrega && !rotaColeta) return;
 
@@ -69,7 +71,9 @@ console.log("CAPTUROU:", rotaEntrega ? rotaEntrega[1] : "COLETA", "| SPR:", spr 
 
 const dados = {
   tipo: rotaEntrega ? "Entrega" : "Coleta",
-  rota: rotaEntrega ? rotaEntrega[1] : "COLETA",
+  rota: rotaEntrega
+  ? rotaEntrega[1]
+  : `COLETA_${numero ? numero[1] : motorista ? motorista[1].trim() : ""}`,
   numero: numero ? numero[1] : "",
   placa: placa,
   motorista: motorista ? motorista[1].trim() : "",
