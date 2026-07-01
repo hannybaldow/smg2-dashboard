@@ -68,7 +68,7 @@ export function gerarTextoRotas(detalhesRotas) {
 🔴 Insucessos: ${rota.falhas} (${textoMotivos(rota.motivos)})
 🕒 Stem Out: ${rota.orh}`;
 
-  }).join("\n\n━━━━━━━━━━━━━━━━━━\n\n");
+  }).join("\n\n──────────────\n\n");
 
 }
 export function gerarImpacto(detalhesRotas) {
@@ -137,7 +137,7 @@ export function gerarTextoRanking(rotas) {
 📍 Rota: ${rota.rota} | #${rota.numero}
 ❌ Insucessos: ${rota.falhas} (${textoMotivos(rota.motivos)})`;
 
-  }).join("\n\n━━━━━━━━━━━━━━━━━━\n\n");
+  }).join("\n\n──────────────\n\n");
 
 }
 export function gerarRankingOfensores(rotas) {

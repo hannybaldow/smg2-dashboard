@@ -106,27 +106,27 @@ const fechamento = `🟢 Fechamento SMG2 🟢
 
 🚨 Impacto de Insucesso: ${dados.percentualFalhas}
 
-━━━━━━━━━━━━━━━━━━
+──────────────
 
 📌 Motivos dos Insucessos
 
 ${gerarImpacto(detalhesRotas)}
 
-━━━━━━━━━━━━━━━━━━
+──────────────
 
 🚨 Rotas com Insucessos
 
 ${gerarTextoRanking(ranking)}
 
-━━━━━━━━━━━━━━━━━━
+──────────────
 
 ${gerarTextoColetas(rotasColeta, detalhesRotas)}
 
-━━━━━━━━━━━━━━━━━━
+──────────────
 
 ${gerarRankingOfensores(ranking)}
 
-━━━━━━━━━━━━━━━━━━
+──────────────
 
 ${gerarRankingPromotores(rotasEntrega)}
 
@@ -342,27 +342,27 @@ value={`🟢 Fechamento SMG2 🟢
 
 🚨 Impacto de Insucesso: ${dados.percentualFalhas}
 
-━━━━━━━━━━━━━━━━━━
+──────────────
 
 📌 Motivos dos Insucessos
 
 ${gerarImpacto(detalhesRotas)}
 
-━━━━━━━━━━━━━━━━━━
+──────────────
 
 🚨 Rotas com Insucessos
 
 ${gerarTextoRanking(ranking)}
 
-━━━━━━━━━━━━━━━━━━
+──────────────
 
 ${gerarTextoColetas(rotasColeta, detalhesRotas)}
 
-━━━━━━━━━━━━━━━━━━
+──────────────
 
 ${gerarRankingOfensores(ranking)}
 
-━━━━━━━━━━━━━━━━━━
+──────────────
 
 ${gerarRankingPromotores(rotasEntrega)}`}
       />
