@@ -1,0 +1,170 @@
+.painelEditar{
+    position:fixed;
+    top:0;
+    right:0;
+    width:360px;
+    height:100vh;
+    background:#fff;
+    display:flex;
+    flex-direction:column;
+    box-shadow:-6px 0 30px rgba(0,0,0,.18);
+    z-index:9999;
+}
+
+.painelHeader{
+    background:#142B63;
+    color:#fff;
+    padding:14px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.painelHeader h2{
+    margin:0;
+    font-size:18px;
+    font-weight:700;
+}
+
+.painelHeader button{
+    background:none;
+    border:none;
+    color:#fff;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.painelConteudo{
+    flex:1;
+    overflow-y:auto;
+    padding:16px;
+    padding-bottom:20px;
+}
+
+.painelConteudo h3{
+    margin:0;
+    font-size:16px;
+    font-weight:700;
+    color:#222;
+}
+
+.subPainel{
+    display:block;
+    margin-top:3px;
+    margin-bottom:18px;
+    color:#666;
+    font-size:13px;
+}
+
+.cardResumo{
+    display:flex;
+    gap:8px;
+    margin-bottom:18px;
+}
+
+.cardResumo div{
+    flex:1;
+    background:#F5F7FA;
+    border-radius:10px;
+    padding:8px;
+    text-align:center;
+}
+
+.cardResumo small{
+    display:block;
+    color:#777;
+    font-size:11px;
+    margin-bottom:4px;
+}
+
+.cardResumo strong{
+    font-size:24px;
+    color:#142B63;
+    font-weight:700;
+}
+
+.listaMotivos{
+    display:flex;
+    flex-direction:column;
+}
+
+.motivoLinha{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:9px 0;
+    border-bottom:1px solid #ECECEC;
+}
+
+.motivoLinha span{
+    flex:1;
+    font-size:15px;
+    font-weight:600;
+    color:#1F2937;
+    line-height:1.2;
+}
+
+.motivoLinha input{
+    width:72px;
+    height:38px;
+    border:1px solid #D1D5DB;
+    border-radius:8px;
+    background:#fff;
+    text-align:center;
+    font-size:17px;
+    font-weight:700;
+    color:#1F2937;
+    outline:none;
+    transition:.2s;
+}
+
+.motivoLinha input:focus{
+    border-color:#2563EB;
+    box-shadow:0 0 0 3px rgba(37,99,235,.15);
+}
+
+.rodapePainel{
+    display:flex;
+    gap:10px;
+    padding:14px;
+    border-top:1px solid #ECECEC;
+    background:#fff;
+}
+
+.btnSalvar{
+    flex:1;
+    height:46px;
+    border:none;
+    border-radius:10px;
+    background:#18A34A;
+    color:#fff;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.btnSalvar:hover{
+    background:#15913F;
+}
+
+.btnSalvar:disabled{
+    background:#BFC5CC;
+    cursor:not-allowed;
+}
+
+.btnCancelar{
+    flex:1;
+    height:46px;
+    border:none;
+    border-radius:10px;
+    background:#E03131;
+    color:#fff;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.btnCancelar:hover{
+    background:#C62828;
+}

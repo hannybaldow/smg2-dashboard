@@ -1,0 +1,47 @@
+.indicadores{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.indicador{
+    background:#FFF;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 8px 20px rgba(15,23,42,.08);
+    transition:.25s;
+    cursor:default;
+    border-top:5px solid transparent;
+}
+
+.indicador:hover{
+    transform:translateY(-4px);
+    box-shadow:0 14px 30px rgba(15,23,42,.12);
+}
+
+.indicador-topo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#64748B;
+    font-size:15px;
+    font-weight:600;
+}
+
+.indicador-topo span{
+    font-size:24px;
+}
+
+.indicador-valor{
+    margin-top:18px;
+    font-size:36px;
+    font-weight:700;
+    color:#0F172A;
+}
+
+.indicador-sub{
+    margin-top:10px;
+    color:#94A3B8;
+    font-size:14px;
+}

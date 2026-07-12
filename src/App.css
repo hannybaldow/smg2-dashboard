@@ -1,77 +1,197 @@
+/* ===========================
+   SMG2 DASHBOARD 2.0
+===========================*/
+
 *{
+    box-sizing:border-box;
     margin:0;
     padding:0;
-    box-sizing:border-box;
 }
 
 body{
-    background:#eef2f7;
-    font-family:Arial,Helvetica,sans-serif;
+
+    background:#EEF3F8;
+
+    font-family:Inter,Arial,Helvetica,sans-serif;
+
+    color:#0F172A;
+
 }
 
 .container{
-    max-width:1200px;
+
+    width:100%;
+
+    max-width:1850px;
+
     margin:auto;
-    padding:30px;
-}
 
-h1{
-    color:#2563eb;
-}
+    padding:25px;
 
-.subtitulo{
-    color:#666;
-    margin-bottom:25px;
 }
 
 .box{
-    background:#fff;
-    padding:20px;
-    border-radius:12px;
-    margin-bottom:25px;
-    box-shadow:0 3px 8px rgba(0,0,0,.08);
+
+    background:#FFF;
+
+    border-radius:20px;
+
+    padding:22px;
+
+    box-shadow:
+        0 10px 30px rgba(15,23,42,.08);
+
 }
+
+.box h2{
+
+    margin-bottom:20px;
+
+    font-size:22px;
+
+    color:#0F172A;
+
+}
+/* ===========================
+   CARDS DOS INDICADORES
+===========================*/
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:15px;
+
+}
+
+.cards>div{
+
+    transition:.25s;
+
+    border-radius:18px!important;
+
+}
+
+.cards>div:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+        0 15px 35px rgba(37,99,235,.15)!important;
+
+}
+
+/* ===========================
+   TEXTAREA
+===========================*/
 
 textarea{
+
     width:100%;
-    height:220px;
-    margin-top:15px;
-    padding:15px;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:16px;
+
+    padding:18px;
+
+    resize:none;
+
+    outline:none;
+
     font-size:15px;
+
+    font-family:Consolas, monospace;
+
+    transition:.25s;
+
+    background:#FCFCFD;
+
 }
 
-button{
+textarea:focus{
+
+    border-color:#2563EB;
+
+    box-shadow:
+        0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+/* ===========================
+   INPUTS
+===========================*/
+
+input{
+
     width:100%;
-    margin-top:15px;
-    padding:15px;
+
+    margin-top:6px;
+
+    padding:12px 14px;
+
+    border-radius:12px;
+
+    border:1px solid #CBD5E1;
+
+    outline:none;
+
+    transition:.25s;
+
+}
+
+input:focus{
+
+    border-color:#2563EB;
+
+    box-shadow:
+        0 0 0 4px rgba(37,99,235,.10);
+
+}
+
+label{
+
+    font-size:13px;
+
+    color:#64748B;
+
+    font-weight:600;
+
+}
+
+/* ===========================
+   BOTÕES
+===========================*/
+
+button{
+
     border:none;
-    border-radius:8px;
-    background:#2563eb;
-    color:white;
-    font-size:18px;
+
+    border-radius:14px;
+
+    padding:15px 20px;
+
     cursor:pointer;
+
+    font-weight:700;
+
+    font-size:15px;
+
+    transition:.25s;
+
+    color:#FFF;
+
+    background:#2563EB;
+
 }
 
 button:hover{
-    background:#1d4ed8;
-}
 
-.cards{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px;
-    margin-bottom:25px;
-}
+    transform:translateY(-3px);
 
-.card{
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    text-align:center;
-    box-shadow:0 3px 8px rgba(0,0,0,.08);
-}
+    box-shadow:
+        0 12px 25px rgba(37,99,235,.25);
 
-.card h2{
-    margin-top:10px;
-    color:#2563eb;
 }

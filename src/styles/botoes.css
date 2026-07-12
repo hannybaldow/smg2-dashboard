@@ -1,0 +1,39 @@
+.btnCentral{
+    width:100%;
+    height:58px;
+
+    border:none;
+    border-radius:12px;
+
+    margin-top:15px;
+
+    font-size:16px;
+    font-weight:600;
+
+    color:#FFF;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.btnCentral:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,.18);
+}
+
+.btnCentral.verde{
+    background:#16A34A;
+}
+
+.btnCentral.vermelho{
+    background:#DC2626;
+}
+
+.btnCentral.azul{
+    background:#2563EB;
+}
+
+.btnCentral.roxo{
+    background:#6D28D9;
+}

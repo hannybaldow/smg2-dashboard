@@ -131,10 +131,11 @@ export function gerarTextoRanking(rotas) {
 
     const ds = rota.ds.toFixed(1).replace(".", ",");
 
-    return `📊 DS: ${ds}%
+  return `📊 DS: ${ds}%
 👨‍✈️ Motorista: ${capitalizar(rota.motorista)}
 🚐 Placa: ${rota.placa || "-"}
 📍 Rota: ${rota.rota} | #${rota.numero}
+🕒 Stem Out: ${rota.orh || "-"}
 ❌ Insucessos: ${rota.falhas} (${textoMotivos(rota.motivos)})`;
 
   }).join("\n\n──────────────\n\n");
@@ -142,7 +143,9 @@ export function gerarTextoRanking(rotas) {
 }
 export function gerarRankingOfensores(rotas) {
 
-  if (!rotas.length) return "";
+  rotas = rotas.filter(r => r.falhas > 0);
+
+if (!rotas.length) return "";
 
   const medalhas = ["🥇","🥈","🥉"];
 
@@ -160,39 +163,70 @@ ${rotas.map((rota, i) => {
 }).join("\n\n")}`;
 
 }
+
 export function gerarRankingPromotores(rotas) {
 
-  console.log(rotas);
+  return rotas
+    .filter((r) => !String(r.rota).startsWith("COLETA_"))
+    .filter((r) => Number(r.falhas) === 0)
+    .sort((a, b) => {
 
-  const promotores = rotas
-    .filter((r) => {
+      if (!a.orh || a.orh === "-") return 1;
+      if (!b.orh || b.orh === "-") return -1;
 
-      const total = r.entregues + r.falhas;
+      return a.orh.localeCompare(b.orh);
 
-const ds = total === 0
-  ? 100
-  : (r.entregues / total) * 100;
-
-return r.falhas === 0;
-
-     
-    })
-    .sort((a,b)=>a.orh.localeCompare(b.orh));
-
-  if (!promotores.length) return "";
-
-  const medalhas = ["🥇","🥈","🥉"];
-
-  return `🏆 Ranking Promotores
-
-${promotores.map((rota, i)=>{
-
-  const posicao = medalhas[i] || `${i + 1}º`;
-
-  return `${posicao} ${capitalizar(rota.motorista)}
-📊 DS: 100%
-🕒 Stem Out: ${rota.orh}`;
-
-}).join("\n\n")}`;
+    });
 
 }
+  export function gerarTextoWhats({
+  data,
+  ds,
+  totalRotas,
+  ambulancias,
+  noShow,
+  pacotes,
+  entregues,
+  falhas,
+  revertidos,
+  impacto,
+  detalhesRotas
+}) {
+
+return `🟢 Fechamento SMG2 🟢
+
+📅 ${data}
+
+📊 DS: ${ds}
+
+🚐 Total de Rotas: ${totalRotas}
+
+🚑 Total de Ambulâncias: ${ambulancias}
+
+🚨 Total de Rotas No Show: ${noShow}
+
+📦 Total de Pacotes: ${pacotes}
+
+✅ Total de Entregues: ${entregues}
+
+❌ Total de Insucessos: ${falhas}
+
+👍 Total de Revertidos: ${revertidos}
+
+🚨 Impacto de Insucesso: ${impacto}
+
+──────────────
+
+📌 Motivos dos Insucessos
+
+${gerarImpacto(detalhesRotas)}
+
+──────────────
+
+🚨 Rotas com Insucessos
+
+${gerarTextoRotas(detalhesRotas)}
+
+──────────────`;
+}
+   
