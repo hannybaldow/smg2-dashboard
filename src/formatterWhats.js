@@ -59,20 +59,44 @@ function capitalizar(nome) {
 }
 export function gerarTextoRotas(detalhesRotas) {
 
-  if (!detalhesRotas.length) return "";
+  const entregas = detalhesRotas.filter(
+    (r) => r.tipo === "Entrega"
+  );
 
-  return detalhesRotas.map((rota) => {
+  if (!entregas.length) return "";
 
-    const rotaTexto = String(rota.rota).startsWith("COLETA_")
-  ? `#${rota.numero}`
-  : `${rota.rota} | #${rota.numero}`;
+  return entregas.map((rota) => {
 
-return `▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-📍 Rota: ${rotaTexto}
+    return `📊 DS: ${rota.ds.toFixed(1).replace(".", ",")}%
 👨‍✈️ Motorista: ${capitalizar(rota.motorista)}
-✅ Entregues: ${rota.entregues}
-❌ Insucessos: ${rota.falhas} (${textoMotivos(rota.motivos)})
-🕒 Stem Out: ${rota.orh}`;
+🚐 Placa: ${rota.placa || "-"}
+📍 Rota: ${
+  rota.rota.startsWith("#")
+    ? rota.rota
+    : `${rota.rota} | #${rota.numero}`
+}
+🕒 Stem Out: ${rota.orh || "-"}
+❌ Insucessos: ${rota.falhas} (${textoMotivos(rota.motivos)})`;
+
+  }).join("\n\n──────────────\n\n");
+
+}
+export function gerarTextoColetas(rotas) {
+
+  const coletas = rotas.filter(
+    (r) => r.tipo === "Coleta" && r.falhas > 0
+  );
+
+  if (!coletas.length) return "";
+
+  return coletas.map((rota) => {
+
+    return `📊 DS: ${rota.ds.toFixed(1).replace(".", ",")}%
+👨‍✈️ Motorista: ${capitalizar(rota.motorista)}
+🚐 Placa: ${rota.placa || "-"}
+📍 Rota: ${rota.rota}
+🕒 Stem Out: ${rota.orh || "-"}
+❌ Insucessos: ${rota.falhas} (${textoMotivos(rota.motivos)})`;
 
   }).join("\n\n──────────────\n\n");
 
@@ -128,7 +152,7 @@ linhas.push(`• Não visitado: ${total.naoVisitado}`);
 export function gerarTextoRanking(rotas) {
 
   const entregas = rotas.filter(
-    (r) => !r.rota.startsWith("COLETA_")
+    (r) => r.tipo === "Entrega"
   );
 
   if (!entregas.length) return "";
@@ -137,10 +161,14 @@ export function gerarTextoRanking(rotas) {
 
     const ds = rota.ds.toFixed(1).replace(".", ",");
 
-  return `📊 DS: ${ds}%
+    return `📊 DS: ${ds}%
 👨‍✈️ Motorista: ${capitalizar(rota.motorista)}
 🚐 Placa: ${rota.placa || "-"}
-📍 Rota: ${String(rota.rota).startsWith("COLETA_") ? "#" + rota.numero : rota.rota + " | #" + rota.numero}
+📍 Rota: ${
+  rota.rota.startsWith("#")
+    ? rota.rota
+    : `${rota.rota} | #${rota.numero}`
+}
 🕒 Stem Out: ${rota.orh || "-"}
 ❌ Insucessos: ${rota.falhas} (${textoMotivos(rota.motivos)})`;
 
@@ -185,7 +213,7 @@ export function gerarRankingPromotores(rotas) {
     });
 
 }
-  export function gerarTextoWhats({
+export function gerarTextoWhats({
   data,
   ds,
   totalRotas,
@@ -196,7 +224,8 @@ export function gerarRankingPromotores(rotas) {
   falhas,
   revertidos,
   impacto,
-  detalhesRotas
+  detalhesRotas,
+  rotasColeta
 }) {
 
 return `🟢 Fechamento SMG2 🟢
@@ -233,6 +262,16 @@ ${gerarImpacto(detalhesRotas)}
 
 ${gerarTextoRotas(detalhesRotas)}
 
-──────────────`;
+${
+  rotasColeta?.length
+    ? `
+
+──────────────
+
+
+🚛 FALHAS DE COLETA
+
+${gerarTextoColetas(rotasColeta)}`
+    : ""
+}`;
 }
-   

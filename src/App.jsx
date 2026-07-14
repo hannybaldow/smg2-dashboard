@@ -14,6 +14,7 @@ import { gerarRanking } from "./ranking";
 
 import {
   gerarImpacto,
+  gerarTextoRotas,
   gerarTextoRanking,
   gerarRankingOfensores,
   gerarRankingPromotores
@@ -103,6 +104,12 @@ function Card({ titulo, valor }) {
  
 export default function App() {
 
+  const [extras, setExtras] = useState({
+  ambulancias: 0,
+  revertidos: 0,
+  noShow: 0,
+});
+
   const hoje = new Date().toLocaleDateString("pt-BR");
 
   const [relatorio, setRelatorio] = useState("");
@@ -131,6 +138,8 @@ export default function App() {
 const refOfensores = useRef(null);
 const refPromotores = useRef(null);
  const ranking = gerarRanking(detalhesRotas);
+ console.log("DETALHES ROTAS");
+console.table(detalhesRotas);
 
   function gerarFechamento() {
 
@@ -153,6 +162,8 @@ console.log(resultado.entregas);
 console.log(resultado.coletas);
 setRotasEntrega(resultado.entregas);
 setRotasColeta(resultado.coletas);
+console.log("ROTAS COLETA");
+console.table(resultado.coletas);
 }
 
 const fechamento = `🟢 Fechamento SMG2 🟢
@@ -187,14 +198,13 @@ ${gerarImpacto(detalhesRotas)}
 
 🚨 Rotas com Insucessos
 
-${gerarTextoRanking(ranking)}
+${gerarTextoRotas(detalhesRotas)}
 
 ──────────────
 
+🚛 FALHAS DE COLETA
+
 ${gerarTextoColetas(rotasColeta, detalhesRotas)}
-
-
-
 `;
 
 function copiarFechamento() {
@@ -542,11 +552,11 @@ async function gerarImagemPromotores() {
         marginTop: 20,
       }}
     >
-
-      <CentralImagens
-  ranking={ranking}
-  promotores={gerarRankingPromotores(rotasEntrega)}
-  data={extras.data}
+<CentralImagens
+  gerarImagemPromotores={gerarImagemPromotores}
+  gerarImagemOfensores={gerarImagemOfensores}
+  extras={extras}
+  setExtras={setExtras}
 />
 <div
   style={{
@@ -722,13 +732,17 @@ ${gerarImpacto(detalhesRotas)}
 
 ──────────────
 
+
 🚨 Rotas com Insucessos
 
-${gerarTextoRanking(ranking)}
+${gerarTextoRotas(detalhesRotas)}
 
 ──────────────
 
-${gerarTextoColetas(rotasColeta, detalhesRotas)}`}
+🚛 FALHAS DE COLETA
+
+${gerarTextoColetas(rotasColeta, detalhesRotas)}
+`}
      />
     </div>
 
@@ -752,19 +766,3 @@ ${gerarTextoColetas(rotasColeta, detalhesRotas)}`}
 );
 
 }
-
-const textoWhats = gerarTextoWhats({
-
-    data,
-    ds,
-    totalRotas,
-    ambulancias,
-    noShow,
-    pacotes,
-    entregues,
-    falhas,
-    revertidos,
-    impacto,
-    detalhesRotas
-
-});

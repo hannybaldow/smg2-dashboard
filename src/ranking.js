@@ -6,12 +6,12 @@ export function gerarRanking(detalhesRotas) {
       const entregues = Number(r.entregues) || 0;
       const falhas = Number(r.falhas) || 0;
 
+      const total = entregues + falhas;
+
       const ds =
-        r.ds !== undefined && r.ds !== null
-          ? Number(r.ds)
-          : (entregues + falhas) > 0
-            ? (entregues / (entregues + falhas)) * 100
-            : 100;
+        total > 0
+          ? (entregues / total) * 100
+          : 100;
 
       return {
         ...r,
@@ -21,16 +21,18 @@ export function gerarRanking(detalhesRotas) {
       };
 
     })
-    // Mantém todas as rotas (entrega e coleta) com falhas
+
+    // Apenas rotas com falha
     .filter((r) => r.falhas > 0)
+
+    // Menor DS primeiro
     .sort((a, b) => {
 
-      // Menor DS primeiro
       if (a.ds !== b.ds) {
         return a.ds - b.ds;
       }
 
-      // Mais falhas como desempate
+      // Mais falhas desempata
       if (b.falhas !== a.falhas) {
         return b.falhas - a.falhas;
       }
@@ -53,12 +55,12 @@ export function gerarPromotores(detalhesRotas) {
       const entregues = Number(r.entregues) || 0;
       const falhas = Number(r.falhas) || 0;
 
+      const total = entregues + falhas;
+
       const ds =
-        r.ds !== undefined && r.ds !== null
-          ? Number(r.ds)
-          : (entregues + falhas) > 0
-            ? (entregues / (entregues + falhas)) * 100
-            : 100;
+        total > 0
+          ? (entregues / total) * 100
+          : 100;
 
       return {
         ...r,
@@ -68,7 +70,11 @@ export function gerarPromotores(detalhesRotas) {
       };
 
     })
+
+    // Apenas quem não teve falhas
     .filter((r) => r.falhas === 0)
+
+    // Maior DS primeiro
     .sort((a, b) => {
 
       if (b.ds !== a.ds) {

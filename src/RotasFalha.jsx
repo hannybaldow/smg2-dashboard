@@ -99,6 +99,8 @@ export default function RotasFalha({
     const novaLista = detalhesRotas.filter(
       (r) => r.rota !== rotaSelecionada.rota
     );
+console.log("ROTA SELECIONADA");
+console.log(rotaSelecionada);
 
     novaLista.push({
       ...rotaSelecionada,

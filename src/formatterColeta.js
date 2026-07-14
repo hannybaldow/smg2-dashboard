@@ -21,33 +21,35 @@ function capitalizar(nome) {
 
 export function gerarTextoColetas(coletas, detalhesRotas = []) {
 
-  if (!coletas.length) return "";
+  const somenteColetas = coletas.filter(
+    (r) => Number(r.falhas) > 0
+  );
 
-  return `📦 FALHAS DE COLETA
+  if (!somenteColetas.length) return "";
 
-${coletas.map((rota) => {
+  return `🚛 FALHAS DE COLETA
 
-  const total = Number(rota.entregues) + Number(rota.falhas);
-
-  const ds = total === 0
-    ? "100,0"
-    : ((rota.entregues / total) * 100)
-        .toFixed(1)
-        .replace(".", ",");
+${somenteColetas.map((rota) => {
 
   const detalhe = detalhesRotas.find(
     d => d.rota === rota.rota
   );
 
-  return `📍 #${rota.numero}
-🚐 ${capitalizar(rota.motorista)}
-🚗 ${rota.placa || "-"}
+  return `📊 DS: ${rota.ds.toFixed(1).replace(".", ",")}%
+👨‍✈️ Motorista: ${capitalizar(rota.motorista)}
+🚐 Placa: ${rota.placa || "-"}
+📍 Rota: ${
+  rota.rota.startsWith("#")
+    ? rota.rota
+    : `${rota.rota} | #${rota.numero}`
+}
 🕒 Stem Out: ${rota.orh || "-"}
-📊 DS: ${ds}%
-❌ ${rota.falhas} falhas${
-  detalhe?.descricao ? ` (${detalhe.descricao})` : ""
+❌ Insucessos: ${rota.falhas}${
+  detalhe?.descricao
+    ? ` (${detalhe.descricao})`
+    : ""
 }`;
 
-}).join("\n\n")}`;
+  }).join("\n\n──────────────\n\n")}`;
 
 }

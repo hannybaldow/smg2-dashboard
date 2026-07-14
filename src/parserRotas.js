@@ -1,123 +1,228 @@
 export function extrairRotas(texto) {
 
-  const blocos = texto
-  .split(
-/(?=CHEVRON_BLUE)|(?=[A-Z]{1,4}\d+_(?:AM1|SD)\s*·\s*#\d+)|(?=Rota\s*#\d+)/i
-)
-  .filter((b) => b.trim());
-  console.log("TOTAL DE BLOCOS:", blocos.length);
+  // Normaliza o texto
+  texto = texto.replace(/\r/g, "");
 
-blocos.forEach((b, i) => {
-  console.log("======== BLOCO", i + 1, "========");
-  console.log(b.substring(0, 300));
-});
+  // Localiza o início de cada rota
+  const regexInicio =
+    /(?:>?[A-Z]{1,4}\d+_(?:AM1|SD)\s*·\s*#\d+|Rota\s*#\d+)/gi;
+
+  const matches = [...texto.matchAll(regexInicio)];
+
+  const blocos = [];
+
+  for (let i = 0; i < matches.length; i++) {
+
+    const inicio = matches[i].index;
+
+    const fim =
+      i + 1 < matches.length
+        ? matches[i + 1].index
+        : texto.length;
+
+    blocos.push(
+      texto.substring(inicio, fim).trim()
+    );
+
+  }
+
+  console.log("TOTAL DE BLOCOS:", blocos.length);
 
   const entregas = [];
   const coletas = [];
 
   blocos.forEach((bloco) => {
-    console.log("==================================");
-console.log(bloco.substring(0,80));
 
-  const rotaEntrega = bloco.match(
-/([A-Z]{1,4}\d+_(?:AM1|SD))/i
-);
-    console.log("ROTA:", rotaEntrega ? rotaEntrega[1] : "NÃO ENCONTROU");
-   const rotaColeta = /Rota\s*#\d+/i.test(bloco);
+    console.log("==============================");
+    console.log(bloco.substring(0,120));
 
-    if (!rotaEntrega && !rotaColeta) return;
+   const primeiraLinha = bloco
+  .split("\n")
+  .map(l => l.trim())
+  .find(l => l.length);
 
-    const numero = bloco.match(/(?:#|Rota\s*#)\s*(\d+)/i);
+const numero = bloco.match(/#\s*(\d+)/);
 
-    const motorista = bloco.match(/\n([a-zà-ú\s]+)\n\s*MLP/i);
+const rotaColeta = /^Rota\s*#/i.test(primeiraLinha);
 
-    const spr = bloco.match(
-      /(\d+)\s+pendentes,\s+(\d+)\s+com falha[s]?,\s+(\d+)\s+bem-sucedidos/i
-    );
-   const dsTexto = bloco.match(/DS\s*([0-9]+,[0-9]+)%/i);
+const rotaEntrega = !rotaColeta
+  ? [null, primeiraLinha.split("·")[0].trim()]
+  : null;
 
-    const executado = bloco.match(
-  /Executado[\s\S]{0,30}?(\d{2}:\d{2})\s*h?s?/i
-);
 
-    const total = bloco.match(/SPR\s+(\d+)\s+unidades/i);
 
-   if (!spr) {
-  console.log("Bloco sem SPR:");
-  console.log(bloco);
-  return;
-}
+if (!rotaEntrega && !rotaColeta) return;
 
-    const linhas = bloco
+    const motorista =
+      bloco.match(/\n([a-zà-ú\s]+)\n\s*MLP/i);
+
+    const spr =
+      bloco.match(
+        /(\d+)\s+pendentes?,\s+(\d+)\s+com\s+falha[s]?,\s+(\d+)\s+bem-sucedidos/i
+      );
+
+    if (!spr) {
+
+      console.log("SEM SPR");
+      console.log(bloco);
+
+      return;
+
+    }
+
+    const executado =
+      bloco.match(
+        /Executado[\s\S]*?(\d{2}:\d{2})hs/i
+      );
+
+    const total =
+      bloco.match(/SPR\s+(\d+)\s+unidades/i);
+       const linhas = bloco
       .split("\n")
       .map((l) => l.trim())
       .filter(Boolean);
 
-    // Procura automaticamente qualquer placa da Amazon
+    let placa = "";
 
-let placa = "";
+    const regexPlaca =
+      /^(SDD-[A-Z0-9]{7}|[A-Z]{3}[0-9A-Z]{4}|TX[A-Z0-9]{4}|OPQ[A-Z0-9]{3}|SRV[A-Z0-9]{4})$/i;
 
-const regexPlaca =
-/^(SDD-[A-Z0-9]{7}|[A-Z]{3}[0-9A-Z]{4}|TX[A-Z0-9]{4}|OPQ[A-Z0-9]{3}|SRV[A-Z0-9]{4})$/i;
+    for (const linha of linhas) {
 
-for (const linha of linhas) {
+      if (regexPlaca.test(linha)) {
+        placa = linha;
+        break;
+      }
 
-  const texto = linha.trim();
-
-  if (regexPlaca.test(texto)) {
-    placa = texto;
-    break;
-  }
-
-}
-console.log(
-  motorista ? motorista[1].trim() : "",
-  "=>",
-  placa
-);
-
-    const pendentes = Number(spr[1]);
-const falhas = Number(spr[2]);
-const entregues = Number(spr[3]);
-
-console.log("CAPTUROU:", rotaEntrega ? rotaEntrega[1] : "COLETA", "| SPR:", spr ? "SIM" : "NÃO");
-
-const dados = {
-  tipo: rotaColeta ? "Coleta" : "Entrega",
- rota: rotaEntrega
-  ? rotaEntrega[1]
-  : `#${numero ? numero[1] : ""}`,
-  numero: numero ? numero[1] : "",
-  placa: placa,
-  motorista: motorista ? motorista[1].trim() : "",
-  totalPacotes: total ? Number(total[1]) : entregues + falhas,
-  pendentes,
-  falhas,
-  entregues,
-  orh: executado?.[1] || "-",
-  ds: dsTexto
-  ? Number(dsTexto[1].replace(",", "."))
-  : (entregues + falhas) > 0
-      ? Number(((entregues / (entregues + falhas)) * 100).toFixed(1))
-      : 0
-};
-
-    console.log(dados);
-
-    if (dados.tipo === "Entrega") {
-      entregas.push(dados);
-    } else {
-      coletas.push(dados);
     }
 
-  }); // fecha o forEach
+    const pendentes = Number(spr[1]);
+    const falhas = Number(spr[2]);
+    const entregues = Number(spr[3]);
 
- console.log("ENTREGAS:", entregas.length);
-console.log("COLETAS:", coletas.length);
+    const totalPacotes =
+      total
+        ? Number(total[1])
+        : pendentes + falhas + entregues;
 
-return {
-  entregas,
-  coletas
-};
+    const ds =
+      totalPacotes > 0
+        ? Number(
+            ((entregues / totalPacotes) * 100).toFixed(1)
+          )
+        : 0;
+console.log(
+  "TIPO:",
+  rotaEntrega?.[1],
+  "| rotaColeta:",
+  rotaColeta,
+  "| tipo:",
+  rotaColeta ? "Coleta" : "Entrega"
+);
 
-} // fecha a função extrairRotas
+   const dados = {
+  tipo: rotaEntrega ? "Entrega" : "Coleta",
+
+  rota: rotaEntrega
+    ? rotaEntrega[1]
+    : `#${numero[1]}`,
+
+      numero: numero ? numero[1] : "",
+
+      placa,
+
+      motorista: motorista
+        ? motorista[1].trim()
+        : "",
+
+      totalPacotes,
+
+      pendentes,
+
+      falhas,
+
+      entregues,
+
+      orh: executado?.[1] || "-",
+
+      ds
+
+    };
+
+    console.log(dados);
+     // Ignora rotas inválidas
+    if (!dados.rota) {
+      console.log("ROTA INVÁLIDA");
+      return;
+    }
+
+    // Evita duplicar a mesma rota
+    const lista = dados.tipo === "Entrega" ? entregas : coletas;
+
+    const jaExiste = lista.find(
+      (r) =>
+        r.rota === dados.rota ||
+        (dados.numero && r.numero === dados.numero)
+    );
+
+    if (jaExiste) {
+
+      // Atualiza caso a nova versão tenha mais informações
+      if (dados.totalPacotes > jaExiste.totalPacotes) {
+        Object.assign(jaExiste, dados);
+      }
+
+      return;
+    }
+
+    lista.push(dados);
+
+    console.log(
+      "ADICIONOU:",
+      dados.rota,
+      "| DS:",
+      dados.ds,
+      "| Falhas:",
+      dados.falhas,
+      "| Pendentes:",
+      dados.pendentes
+    );
+
+  }); // fim do forEach
+  console.log("================================");
+  console.log("RESUMO PARSER");
+  console.log("================================");
+
+  console.log("ENTREGAS:", entregas.length);
+  console.log("COLETAS:", coletas.length);
+
+  console.table(
+    entregas.map((r) => ({
+      Rota: r.rota,
+      Motorista: r.motorista,
+      Total: r.totalPacotes,
+      Pendentes: r.pendentes,
+      Falhas: r.falhas,
+      Entregues: r.entregues,
+      DS: r.ds,
+    }))
+  );
+
+  console.table(
+    coletas.map((r) => ({
+      Rota: r.rota,
+      Motorista: r.motorista,
+      Total: r.totalPacotes,
+      Pendentes: r.pendentes,
+      Falhas: r.falhas,
+      Entregues: r.entregues,
+      DS: r.ds,
+    }))
+  );
+
+  return {
+    entregas,
+    coletas,
+  };
+
+}

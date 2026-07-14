@@ -13,6 +13,11 @@ export default function AppNovo() {
   const [relatorio, setRelatorio] = useState("");
   const [textoWhats, setTextoWhats] = useState("");
 const [textoHora, setTextoHora] = useState("");
+const [extras, setExtras] = useState({
+  ambulancias: 0,
+  revertidos: 0,
+  noShow: 0,
+});
 
 const [rotas, setRotas] = useState([]);
 const [rotasEditadas, setRotasEditadas] = useState({});
@@ -48,9 +53,9 @@ function gerarFechamento() {
 
 🚐 Total de Rotas: ${resumo.rotasTotais}
 
-🚑 Total de Ambulâncias: 0
+🚑 Total de Ambulâncias: ${extras.ambulancias}
 
-🚨 Total de Rotas No Show: 0
+🚨 Total de Rotas No Show: ${extras.noShow}
 
 📦 Total de Pacotes: ${resumo.pacotes}
 
@@ -58,7 +63,7 @@ function gerarFechamento() {
 
 ❌ Total de Insucessos: ${resumo.falhas}
 
-👍 Total de Revertidos: 0
+👍 Total de Revertidos: ${extras.revertidos}
 
 🚨 Impacto de Insucesso: ${((resumo.falhas / resumo.pacotes) * 100).toFixed(1).replace(".", ",")}%
 `);
@@ -162,7 +167,8 @@ function atualizarFechamento(rotasSalvas, resumo = dados) {
     "Não visitado": 0
   };
 
-  let rotasTexto = "";
+  let rotasEntregaTexto = "";
+let rotasColetaTexto = "";
 
   Object.entries(rotasSalvas).forEach(([_, rota]) => {
 
@@ -254,20 +260,27 @@ function atualizarFechamento(rotasSalvas, resumo = dados) {
 
     });
 
-    if (descricao.length) {
+  if (descricao.length) {
 
-      rotasTexto += `
-
+  const texto = `
 📊 DS: ${rota.ds.toFixed(1).replace(".", ",")}%
 👨‍✈️ Motorista: ${rota.motorista}
 🚐 Placa: ${rota.placa}
-📍 Rota: ${rota.rota} | #${rota.numero}
+📍 Rota: ${rota.rota.startsWith("#")
+  ? rota.rota
+  : `${rota.rota} | #${rota.numero}`}
 🕒 Stem Out: ${rota.orh || "-"}
 ❌ Insucessos: ${rota.falhas} (${descricao.join(", ")})
 
 ──────────────`;
 
-    }
+  if (rota.tipo === "Coleta") {
+    rotasColetaTexto += texto;
+  } else {
+    rotasEntregaTexto += texto;
+  }
+
+}
 
   });
 
@@ -279,9 +292,9 @@ function atualizarFechamento(rotasSalvas, resumo = dados) {
 
 🚐 Total de Rotas: ${resumo.rotasTotais}
 
-🚑 Total de Ambulâncias: 0
+🚑 Total de Ambulâncias: ${extras.ambulancias}
 
-🚨 Total de Rotas No Show: 0
+🚨 Total de Rotas No Show: ${extras.noShow}
 
 📦 Total de Pacotes: ${resumo.pacotes}
 
@@ -289,7 +302,7 @@ function atualizarFechamento(rotasSalvas, resumo = dados) {
 
 ❌ Total de Insucessos: ${resumo.falhas}
 
-👍 Total de Revertidos: 0
+👍 Total de Revertidos: ${extras.revertidos}
 
 🚨 Impacto de Insucesso: ${((resumo.falhas / resumo.pacotes) * 100).toFixed(1).replace(".", ",")}%
 
@@ -314,15 +327,18 @@ function atualizarFechamento(rotasSalvas, resumo = dados) {
 
 ──────────────
 
-🚨 Rotas com Insucessos${rotasTexto}`);
-}
+🚨 Rotas com Insucessos
 
-function gerarImagemPromotores() {
-  alert("Em construção");
-}
+${rotasEntregaTexto}
 
-function gerarImagemOfensores() {
-  alert("Em construção");
+${rotasColetaTexto
+  ? `🚛 FALHAS DE COLETA
+
+${rotasColetaTexto}`
+  : ""}
+`);
+
+
 }
 async function gerarImagemPromotores() {
 
@@ -535,9 +551,12 @@ setPainelAberto(true);
 
 </div>
 
- <CentralImagens
-    gerarImagemPromotores={gerarImagemPromotores}
-    gerarImagemOfensores={gerarImagemOfensores}
+<CentralImagens
+  gerarImagemPromotores={gerarImagemPromotores}
+  gerarImagemOfensores={gerarImagemOfensores}
+  extras={extras}
+  setExtras={setExtras}
+  atualizarFechamento={() => atualizarFechamento(rotas)}
 />
 
       </section>
