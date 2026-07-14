@@ -1,8 +1,16 @@
 export function extrairRotas(texto) {
 
   const blocos = texto
-  .split(/(?=>?[A-Z]{1,4}\d+_(?:AM1|SD)\s*·\s*#\d+|(?=Rota\s*#\d+)|(?=\d{4}\s*·\s*#\d+))/i)
+  .split(
+/(?=CHEVRON_BLUE)|(?=[A-Z]{1,4}\d+_(?:AM1|SD)\s*·\s*#\d+)|(?=Rota\s*#\d+)/i
+)
   .filter((b) => b.trim());
+  console.log("TOTAL DE BLOCOS:", blocos.length);
+
+blocos.forEach((b, i) => {
+  console.log("======== BLOCO", i + 1, "========");
+  console.log(b.substring(0, 300));
+});
 
   const entregas = [];
   const coletas = [];
@@ -11,26 +19,22 @@ export function extrairRotas(texto) {
     console.log("==================================");
 console.log(bloco.substring(0,80));
 
-   const rotaEntrega = bloco.match(
-/([A-Z]{1,4}\d+_(AM1|SD)|\d{4})/i
+  const rotaEntrega = bloco.match(
+/([A-Z]{1,4}\d+_(?:AM1|SD))/i
 );
     console.log("ROTA:", rotaEntrega ? rotaEntrega[1] : "NÃO ENCONTROU");
-    const rotaColeta =
-  !rotaEntrega &&
-  bloco.match(/Rota\s*#(\d+)/i);
+   const rotaColeta = /Rota\s*#\d+/i.test(bloco);
 
     if (!rotaEntrega && !rotaColeta) return;
 
-    const numero = bloco.match(/#(\d+)/);
+    const numero = bloco.match(/(?:#|Rota\s*#)\s*(\d+)/i);
 
     const motorista = bloco.match(/\n([a-zà-ú\s]+)\n\s*MLP/i);
 
     const spr = bloco.match(
       /(\d+)\s+pendentes,\s+(\d+)\s+com falha[s]?,\s+(\d+)\s+bem-sucedidos/i
     );
-    const ds = bloco.match(
-  /([0-9]+,[0-9]+)%\s+falhas de entrega/i
-);
+   const dsTexto = bloco.match(/DS\s*([0-9]+,[0-9]+)%/i);
 
     const executado = bloco.match(
   /Executado[\s\S]{0,30}?(\d{2}:\d{2})\s*h?s?/i
@@ -91,7 +95,11 @@ const dados = {
   falhas,
   entregues,
   orh: executado?.[1] || "-",
-  ds: ds ? Number(ds[1].replace(",", ".")) : 100
+  ds: dsTexto
+  ? Number(dsTexto[1].replace(",", "."))
+  : (entregues + falhas) > 0
+      ? Number(((entregues / (entregues + falhas)) * 100).toFixed(1))
+      : 0
 };
 
     console.log(dados);
