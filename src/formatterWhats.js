@@ -25,8 +25,10 @@ function textoMotivos(motivos) {
   if (motivos.endereco)
     lista.push(`${motivos.endereco} endereço${motivos.endereco > 1 ? "s" : ""} incompleto${motivos.endereco > 1 ? "s" : ""}`);
 
-  if (motivos.agencia)
-    lista.push(`${motivos.agencia} não estava${motivos.agencia > 1 ? "m" : ""} na agência`);
+ if (motivos.agencia)
+  lista.push(
+    `${motivos.agencia} ${motivos.agencia > 1 ? "não estavam na agência" : "não estava na agência"}`
+  );
 
   if (lista.length === 0) {
   return "Sem detalhamento";
@@ -61,11 +63,15 @@ export function gerarTextoRotas(detalhesRotas) {
 
   return detalhesRotas.map((rota) => {
 
-    return `▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-🚐 ${rota.rota} | #${rota.numero}
+    const rotaTexto = String(rota.rota).startsWith("COLETA_")
+  ? `#${rota.numero}`
+  : `${rota.rota} | #${rota.numero}`;
+
+return `▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+📍 Rota: ${rotaTexto}
 👨‍✈️ Motorista: ${capitalizar(rota.motorista)}
 ✅ Entregues: ${rota.entregues}
-🔴 Insucessos: ${rota.falhas} (${textoMotivos(rota.motivos)})
+❌ Insucessos: ${rota.falhas} (${textoMotivos(rota.motivos)})
 🕒 Stem Out: ${rota.orh}`;
 
   }).join("\n\n──────────────\n\n");
@@ -134,7 +140,7 @@ export function gerarTextoRanking(rotas) {
   return `📊 DS: ${ds}%
 👨‍✈️ Motorista: ${capitalizar(rota.motorista)}
 🚐 Placa: ${rota.placa || "-"}
-📍 Rota: ${rota.rota} | #${rota.numero}
+📍 Rota: ${String(rota.rota).startsWith("COLETA_") ? "#" + rota.numero : rota.rota + " | #" + rota.numero}
 🕒 Stem Out: ${rota.orh || "-"}
 ❌ Insucessos: ${rota.falhas} (${textoMotivos(rota.motivos)})`;
 

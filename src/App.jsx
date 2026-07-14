@@ -548,6 +548,75 @@ async function gerarImagemPromotores() {
   promotores={gerarRankingPromotores(rotasEntrega)}
   data={extras.data}
 />
+<div
+  style={{
+    gridColumn: "1 / 3",
+    marginTop: 15,
+    paddingTop: 15,
+    borderTop: "1px solid #e5e7eb",
+  }}
+>
+
+  <h3
+    style={{
+      marginBottom: 15,
+      fontSize: 16,
+    }}
+  >
+    ⚙️ Ajustes do Fechamento
+  </h3>
+
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "1fr 70px",
+      gap: 10,
+      alignItems: "center",
+    }}
+  >
+
+    <label>🚨 No Show</label>
+
+    <input
+      type="number"
+      value={extras.noShow}
+      onChange={(e)=>
+        setExtras({
+          ...extras,
+          noShow:Number(e.target.value)
+        })
+      }
+    />
+
+    <label>🚑 Ambulâncias</label>
+
+    <input
+      type="number"
+      value={extras.ambulancias}
+      onChange={(e)=>
+        setExtras({
+          ...extras,
+          ambulancias:Number(e.target.value)
+        })
+      }
+    />
+
+    <label>👍 Revertidos</label>
+
+    <input
+      type="number"
+      value={extras.revertidos}
+      onChange={(e)=>
+        setExtras({
+          ...extras,
+          revertidos:Number(e.target.value)
+        })
+      }
+    />
+
+  </div>
+
+</div>
 
       <button
         style={{

@@ -84,9 +84,9 @@ console.log("CAPTUROU:", rotaEntrega ? rotaEntrega[1] : "COLETA", "| SPR:", spr 
 
 const dados = {
   tipo: rotaColeta ? "Coleta" : "Entrega",
-  rota: rotaEntrega
-    ? rotaEntrega[1]
-    : `COLETA_${numero ? numero[1] : motorista ? motorista[1].trim() : ""}`,
+ rota: rotaEntrega
+  ? rotaEntrega[1]
+  : `#${numero ? numero[1] : ""}`,
   numero: numero ? numero[1] : "",
   placa: placa,
   motorista: motorista ? motorista[1].trim() : "",

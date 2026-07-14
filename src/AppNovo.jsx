@@ -235,9 +235,13 @@ function atualizarFechamento(rotasSalvas, resumo = dados) {
             break;
 
           case "Não estava na agência":
-            totais["Não estava na agência"] += qtd;
-            descricao.push(`${qtd} agência`);
-            break;
+  totais["Não estava na agência"] += qtd;
+
+  descricao.push(
+    `${qtd} ${qtd > 1 ? "não estavam na agência" : "não estava na agência"}`
+  );
+
+  break;
 
           case "Não visitado":
             totais["Não visitado"] += qtd;
