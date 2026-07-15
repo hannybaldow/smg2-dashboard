@@ -261,6 +261,14 @@ let rotasColetaTexto = "";
     });
 
   if (descricao.length) {
+    console.log(
+  "WHATSAPP",
+  rota.rota,
+  "DS:", rota.ds,
+  "Entregues:", rota.entregues,
+  "Falhas:", rota.falhas,
+  "Pendentes:", rota.pendentes
+);
 
   const texto = `
 📊 DS: ${rota.ds.toFixed(1).replace(".", ",")}%

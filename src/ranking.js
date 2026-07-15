@@ -3,15 +3,10 @@ export function gerarRanking(detalhesRotas) {
   return detalhesRotas
     .map((r) => {
 
-      const entregues = Number(r.entregues) || 0;
-      const falhas = Number(r.falhas) || 0;
-
-      const total = entregues + falhas;
-
-      const ds =
-        total > 0
-          ? (entregues / total) * 100
-          : 100;
+      return {
+  ...r,
+  ds: Number(r.ds) || 0,
+};
 
       return {
         ...r,

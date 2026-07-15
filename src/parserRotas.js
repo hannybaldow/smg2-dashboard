@@ -75,8 +75,7 @@ if (!rotaEntrega && !rotaColeta) return;
         /Executado[\s\S]*?(\d{2}:\d{2})hs/i
       );
 
-    const total =
-      bloco.match(/SPR\s+(\d+)\s+unidades/i);
+    
        const linhas = bloco
       .split("\n")
       .map((l) => l.trim())
@@ -99,11 +98,9 @@ if (!rotaEntrega && !rotaColeta) return;
     const pendentes = Number(spr[1]);
     const falhas = Number(spr[2]);
     const entregues = Number(spr[3]);
+    console.log("================================");
 
-    const totalPacotes =
-      total
-        ? Number(total[1])
-        : pendentes + falhas + entregues;
+const totalPacotes = pendentes + falhas + entregues;
 
     const ds =
       totalPacotes > 0
@@ -111,6 +108,17 @@ if (!rotaEntrega && !rotaColeta) return;
             ((entregues / totalPacotes) * 100).toFixed(1)
           )
         : 0;
+
+        if ((rotaEntrega?.[1] || "") === "VX2_AM1") {
+  console.log("======== VX2 ========");
+  console.log({
+    pendentes,
+    falhas,
+    entregues,
+    totalPacotes,
+    ds,
+  });
+}
 console.log(
   "TIPO:",
   rotaEntrega?.[1],
