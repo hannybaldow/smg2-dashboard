@@ -70,10 +70,9 @@ if (!rotaEntrega && !rotaColeta) return;
 
     }
 
-    const executado =
-      bloco.match(
-        /Executado[\s\S]*?(\d{2}:\d{2})hs/i
-      );
+    const executado = bloco.match(
+  /Executado[\s\S]{0,40}?(\d{2}:\d{2})\s*h?s?/i
+);
 
     
        const linhas = bloco
