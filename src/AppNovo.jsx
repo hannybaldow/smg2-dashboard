@@ -646,7 +646,7 @@ setPainelAberto(true);
   titulo="🏆 Ranking Promotores"
   cor="#16A34A"
   data={new Date().toLocaleDateString("pt-BR")}
-  rotas={gerarPromotores(rotas).slice(0, 10)}
+  rotas={gerarPromotores(rotas)}
 />
 
   <RankingImagem
@@ -654,7 +654,7 @@ setPainelAberto(true);
     titulo="🚨 Ranking Ofensores"
     cor="#DC2626"
     data={new Date().toLocaleDateString("pt-BR")}
-    rotas={gerarRanking(rotas).slice(0, 10)}
+    rotas={gerarRanking(rotas)}
   />
 
 </div>
